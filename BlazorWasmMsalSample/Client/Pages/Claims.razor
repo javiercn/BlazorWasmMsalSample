@@ -1,0 +1,22 @@
+﻿@page "/claims"
+<PageTitle>Claims</PageTitle>
+@code {
+    private AuthenticationState _authState = null;
+
+    [CascadingParameter] public Task<AuthenticationState> AuthState { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        _authState = await AuthState;
+    }
+}
+
+@if(_authState?.User?.Identity.IsAuthenticated == true)
+{
+    <ul>
+    @foreach (var claim in _authState.User.Claims)
+    {
+        <li>@(claim.Type): @(claim.Value)</li>
+    }
+    </ul>
+}
